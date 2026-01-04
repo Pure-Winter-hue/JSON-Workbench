@@ -1,0 +1,11 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:fluent="clr-namespace:Avalonia.Themes.Fluent;assembly=Avalonia.Themes.Fluent"
+             x:Class="JsonWorkbench.App"
+             RequestedThemeVariant="Light">
+  <Application.Styles>
+    <fluent:FluentTheme />
+    <!-- App theme override (swapped at runtime via App.SetTheme). -->
+    <StyleInclude Source="avares://JsonWorkbench/Themes/Light.axaml" />
+  </Application.Styles>
+</Application>

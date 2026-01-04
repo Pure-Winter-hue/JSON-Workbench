@@ -1,0 +1,231 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:JsonWorkbench.ViewModels"
+             x:Class="JsonWorkbench.Views.HandbookTabView"
+             x:DataType="vm:HandbookTabViewModel">
+
+	  <Grid ColumnDefinitions="*,6,420" RowDefinitions="Auto,*,Auto" ColumnSpacing="0">
+    <!-- Header row -->
+    <StackPanel Grid.ColumnSpan="3" Spacing="6">
+      <WrapPanel Orientation="Horizontal">
+        <WrapPanel.Styles>
+          <Style Selector="WrapPanel > Control">
+            <Setter Property="Margin" Value="0,0,10,0"/>
+          </Style>
+        </WrapPanel.Styles>
+        <Button Content="Copy VTML" Click="CopyVtml_Click" Focusable="False"/>
+        <Button Content="Copy JSON-escaped" Click="CopyEscaped_Click" Focusable="False"/>
+        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" Text="{Binding Status}"/>
+      </WrapPanel>
+
+      <!-- Font options -->
+      <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6" Background="{DynamicResource PanelBackgroundBrush}">
+        <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <WrapPanel.Styles>
+            <Style Selector="WrapPanel > Control">
+              <Setter Property="Margin" Value="0,0,10,6"/>
+            </Style>
+          </WrapPanel.Styles>
+          <TextBlock Text="Font" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+
+          <TextBlock Text="Size" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+          <TextBox Name="FontSizeBox" Width="52" Text="14"/>
+
+          <TextBlock Text="Weight" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+          <ComboBox Name="FontWeightBox" Width="92" SelectedIndex="0">
+            <ComboBoxItem Content="normal"/>
+            <ComboBoxItem Content="bold"/>
+          </ComboBox>
+
+          <TextBlock Text="Align" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+          <ComboBox Name="FontAlignBox" Width="92" SelectedIndex="0">
+            <ComboBoxItem Content="left"/>
+            <ComboBoxItem Content="center"/>
+            <ComboBoxItem Content="right"/>
+          </ComboBox>
+
+          <TextBlock Text="Opacity" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+          <TextBox Name="FontOpacityBox" Width="56" Text="1.0"/>
+
+          <TextBlock Text="Line height" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}"/>
+          <TextBox Name="FontLineHeightBox" Width="66" Text=""/>
+
+          <CheckBox Name="FontUseColorBox" Content="Use picked color" IsChecked="True" VerticalAlignment="Center"/>
+
+          <Button Content="Insert font" Click="FontInsert_Click" Focusable="False"/>
+          <Button Content="Wrap selection" Click="FontWrap_Click" Focusable="False"/>
+        </WrapPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- Left: VTML source editor -->
+    <Border Grid.Row="1" MinWidth="260" CornerRadius="8" BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" Padding="8" Background="{DynamicResource PanelBackgroundBrush}">
+      <TextBox Name="SourceEditor"
+               Text="{Binding VtmlText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+               AcceptsReturn="True"
+               TextWrapping="Wrap"
+               ScrollViewer.VerticalScrollBarVisibility="Auto"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto"
+               FontFamily="Consolas"
+               FontSize="14"
+               Padding="6,4,18,18"/>
+    </Border>
+
+    <!-- Splitter between editor and preview -->
+    <GridSplitter Grid.Row="1" Grid.Column="1"
+                 Width="6"
+                 Background="{DynamicResource SplitterBrush}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Cursor="SizeWestEast"/>
+
+    <!-- Right: Preview + tools -->
+    <Border Grid.Row="1" Grid.Column="2" MinWidth="320" CornerRadius="8" BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" Padding="10" Background="{DynamicResource PanelBackgroundBrush}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="12">
+          <TextBlock FontSize="16" Text="VTML Preview"/>
+
+          <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Background="{DynamicResource PanelBackgroundBrush}">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxHeight="260">
+              <TextBlock Name="PreviewText" TextWrapping="Wrap"/>
+            </ScrollViewer>
+          </Border>
+
+		          <TextBlock FontSize="16" Text="Quick insert"/>
+			          <WrapPanel HorizontalAlignment="Stretch">
+	            <WrapPanel.Styles>
+	              <Style Selector="WrapPanel > Button">
+	                <Setter Property="Padding" Value="10,6"/>
+		                <Setter Property="FontSize" Value="13"/>
+	                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+	                <Setter Property="VerticalContentAlignment" Value="Center"/>
+					  <Setter Property="MinWidth" Value="120"/>
+					  <Setter Property="MinHeight" Value="34"/>
+	                <Setter Property="Focusable" Value="False"/>
+	              </Style>
+	            </WrapPanel.Styles>
+	            <Button Margin="0,0,8,8" Content="Bold" ToolTip.Tip="Wraps selection in VTML strong" Click="Bold_Click"/>
+	            <Button Margin="0,0,8,8" Content="Italic" ToolTip.Tip="Wraps selection in VTML italic" Click="Italic_Click"/>
+	            <Button Margin="0,0,8,8" Content="Line break" ToolTip.Tip="Inserts a VTML line break" Click="Br_Click"/>
+	            <Button Margin="0,0,8,8" Content="Link" ToolTip.Tip="Inserts a VTML link scaffold" Click="Link_Click"/>
+	            <Button Margin="0,0,8,8" Content="Hotkey" ToolTip.Tip="Wraps selection in a VTML hotkey" Click="Hotkey_Click"/>
+	            <Button Margin="0,0,8,8" Content="Icon" ToolTip.Tip="Inserts a VTML icon tag" Click="Icon_Click"/>
+	            <Button Margin="0,0,8,8" Content="Itemstack" ToolTip.Tip="Inserts a VTML itemstack tag" Click="Itemstack_Click"/>
+	            <Button Margin="0,0,8,8" Content="Clear" ToolTip.Tip="Inserts a VTML clear tag" Click="Clear_Click"/>
+          </WrapPanel>
+
+          <TextBlock FontSize="16" Text="Color picker"/>
+	          <StackPanel Spacing="8">
+	            <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Pick a color with the wheel. Drag to choose hue/saturation. Use Value to darken."/>
+	            <Grid ColumnDefinitions="Auto,60" ColumnSpacing="14" VerticalAlignment="Top">
+  <Border Grid.Column="0" BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Background="{DynamicResource PanelBackgroundBrush}">
+    <Canvas Width="220" Height="220">
+      <Image Name="ColorWheelImage"
+             Width="204" Height="204"
+             PointerPressed="ColorWheel_PointerPressed"
+             PointerMoved="ColorWheel_PointerMoved"/>
+      <Ellipse Name="ColorWheelMarker" Width="12" Height="12" Stroke="White" StrokeThickness="2" Fill="#00000000"/>
+    </Canvas>
+  </Border>
+
+  <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Top" MinHeight="220">
+    <TextBlock Text="Value" HorizontalAlignment="Center"/>
+    <Slider Name="ValueSlider"
+            Minimum="0" Maximum="100" Value="100"
+            Orientation="Vertical"
+            Height="220" Width="44"
+            ValueChanged="ValueSlider_ValueChanged"/>
+    <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Darker" HorizontalAlignment="Center"/>
+  </StackPanel>
+</Grid>
+	          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Border Width="24" Height="24" CornerRadius="4" BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" Background="{Binding PickedBrush}"/>
+            <TextBlock VerticalAlignment="Center" Text="{Binding PickedColorHex}"/>
+            <Button Content="Insert Hex" Click="InsertHex_Click" Focusable="False"/>
+          </StackPanel>
+
+		          <TextBlock FontSize="16" Text="JSON helpers"/>
+		          <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Background="{DynamicResource PanelBackgroundBrush}">
+		            <StackPanel Spacing="8">
+		              <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Paste these into your asset JSON files. Title/Text are lang keys." TextWrapping="Wrap" Margin="0,0,8,0"/>
+		              <StackPanel Orientation="Horizontal" Spacing="10">
+		                <CheckBox Content="Include in handbook" IsChecked="{Binding ItemHandbookInclude}"/>
+		                <Button Content="Copy item handbook JSON" Click="CopyItemHandbookJson_Click" Focusable="False"/>
+		              </StackPanel>
+		              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="6">
+		                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Title key"/>
+		                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ItemHandbookTitleKey, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Text key"/>
+		                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ItemHandbookTextKey, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Text="JSON"/>
+		                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ItemHandbookJson}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12"/>
+		              </Grid>
+		            </StackPanel>
+		          </Border>
+		          <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10" Background="{DynamicResource PanelBackgroundBrush}">
+		            <StackPanel Spacing="8">
+		              <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Standalone guide page JSON goes in assets/&lt;modid&gt;/config/handbook/*.json"/>
+		              <Button Content="Copy guide page JSON" Click="CopyGuidePageJson_Click" Focusable="False" HorizontalAlignment="Left"/>
+		              <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="6">
+		                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="pageCode"/>
+		                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding GuidePageCode, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="title"/>
+		                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GuideTitleKey, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="text"/>
+		                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding GuideTextKey, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="categoryCode"/>
+		                <TextBox Grid.Row="3" Grid.Column="1" Watermark="optional" Text="{Binding GuideCategoryCode, Mode=TwoWay}"/>
+		                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Top" Text="JSON"/>
+		                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GuidePageJson}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" FontFamily="Consolas" FontSize="12"/>
+		              </Grid>
+		            </StackPanel>
+		          </Border>
+
+		      		  <TextBlock FontSize="16" Text="Tag reference"/>
+          <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Background="{DynamicResource PanelBackgroundBrush}">
+            <StackPanel Spacing="4">
+              <TextBlock Text="{Binding HoveredTagTag}" FontFamily="Consolas" FontSize="13"/>
+              <TextBlock Text="{Binding HoveredTagWhatItDoes}" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding HoveredTagExample}" FontFamily="Consolas" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"/>
+            </StackPanel>
+          </Border>
+
+          <!--
+            Keep the tag "preview" (HoveredTag*) visible while browsing long lists:
+            the list gets its own scrollbar instead of pushing the whole handbook panel.
+          -->
+          <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" MaxHeight="320">
+            <ItemsControl ItemsSource="{Binding Tags}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:TagInfo">
+                  <Border BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,0,0,6"
+                          PointerEntered="TagItem_PointerEnter" Background="{DynamicResource PanelBackgroundBrush}">
+                    <StackPanel>
+                      <TextBlock Text="{Binding Tag}" FontFamily="Consolas" FontSize="13"/>
+                      <TextBlock Text="{Binding WhatItDoes}" Foreground="{DynamicResource TextMutedBrush}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Footer row -->
+    <Border Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="{DynamicResource PanelBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,8,0,0" Background="{DynamicResource PanelBackgroundBrush}">
+      <StackPanel Spacing="6">
+        <TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="JSON-escaped VTML (for lang files, server descriptions, etc.)"/>
+        <TextBox Text="{Binding JsonEscapedVtml}"
+                 IsReadOnly="True"
+                 FontFamily="Consolas"
+                 FontSize="13"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"/>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

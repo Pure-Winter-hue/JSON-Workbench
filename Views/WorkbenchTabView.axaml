@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:JsonWorkbench.ViewModels"
+             x:Class="JsonWorkbench.Views.WorkbenchTabView"
+             x:DataType="vm:WorkbenchTabViewModel">
+	<Grid ColumnDefinitions="*,420" RowDefinitions="Auto,*,Auto" ColumnSpacing="10">
+		<!-- Header row -->
+		<StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10">
+			<Button Content="Copy JSON" Click="CopyJson_Click"/>
+			<TextBlock VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" Text="{Binding Status}"/>
+		</StackPanel>
+
+		<!-- Left JSON editor -->
+		<Border Grid.Row="1" CornerRadius="8" BorderBrush="{DynamicResource PanelBorderBrush}" Background="{DynamicResource PanelBackgroundBrush}" BorderThickness="1" Padding="8">
+			<TextBox Text="{Binding JsonText, Mode=TwoWay}"
+					 AcceptsReturn="True"
+					 TextWrapping="NoWrap"
+					 ScrollViewer.VerticalScrollBarVisibility="Auto"
+					 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+					 FontFamily="Consolas"
+					 FontSize="14"/>
+		</Border>
+
+		<!-- Right panel -->
+		<Border Grid.Row="1" Grid.Column="1" CornerRadius="8" BorderBrush="{DynamicResource PanelBorderBrush}" Background="{DynamicResource PanelBackgroundBrush}" BorderThickness="1" Padding="10">
+			<StackPanel Spacing="10">
+				<TextBlock FontSize="16" Text="Add to JSON" />
+
+				<StackPanel Spacing="6">
+					<TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Category"/>
+					<ComboBox ItemsSource="{Binding Categories}"
+							  SelectedItem="{Binding SelectedCategory}"
+							  HorizontalAlignment="Stretch"/>
+				</StackPanel>
+
+				<StackPanel Spacing="6">
+					<TextBlock Foreground="{DynamicResource TextMutedBrush}" Text="Property / Snippet"/>
+					<ComboBox ItemsSource="{Binding FilteredOptions}"
+							  SelectedItem="{Binding SelectedOption}"
+							  HorizontalAlignment="Stretch">
+						<ComboBox.ItemTemplate>
+							<DataTemplate x:DataType="vm:JsonInsertOption">
+								<StackPanel>
+									<TextBlock Text="{Binding DisplayName}" />
+							<TextBlock Text="{Binding Pointer}" FontSize="11" Foreground="{DynamicResource TextFaintBrush}"/>
+								</StackPanel>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</StackPanel>
+
+				<Button Content="Add"
+						Click="Add_Click"
+						HorizontalAlignment="Left"
+						Width="120"/>
+
+				<Border BorderBrush="{DynamicResource PanelBorderBrush}" Background="{DynamicResource PanelBackgroundBrush}" BorderThickness="1" CornerRadius="6" Padding="8">
+					<TextBlock TextWrapping="Wrap"
+							Foreground="{DynamicResource TextMutedBrush}"
+							   Text="{Binding SelectedOption.Description}"/>
+				</Border>
+			</StackPanel>
+		</Border>
+
+		<!-- Footer row -->
+		<TextBlock Grid.Row="2" Grid.ColumnSpan="2"
+				   Margin="2,8,2,0"
+				   Foreground="{DynamicResource TextFaintBrush}"
+				   Text="Tip: You can type freely on the left. If JSON is invalid, Add won’t apply until it parses."/>
+	</Grid>
+</UserControl>

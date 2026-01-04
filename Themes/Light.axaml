@@ -1,0 +1,65 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F6F7F9"/>
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="PanelBorderBrush" Color="#C9CED6"/>
+
+    <SolidColorBrush x:Key="HeaderBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="HeaderForegroundBrush" Color="#111827"/>
+
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#111827"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="#6B7280"/>
+    <SolidColorBrush x:Key="TextFaintBrush" Color="#9CA3AF"/>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="#2563EB"/>
+
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="#C9CED6"/>
+
+    <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#C9CED6"/>
+
+    <SolidColorBrush x:Key="SplitterBrush" Color="#D1D5DB"/>
+  </Styles.Resources>
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="Button">
+    <Setter Property="Background" Value="{DynamicResource ButtonBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBox">
+    <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="CaretBrush" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="ComboBox">
+    <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TabControl">
+    <Setter Property="Background" Value="{DynamicResource AppBackgroundBrush}"/>
+  </Style>
+
+  <Style Selector="TabItem">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="GridSplitter">
+    <Setter Property="Background" Value="{DynamicResource SplitterBrush}"/>
+  </Style>
+</Styles>
